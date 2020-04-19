@@ -1,0 +1,11 @@
+[Unit]
+Description=Start Calculator microservice
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=5s
+ExecStart=/home/vagrant/app
+
+[Install]
+WantedBy = multi-user.target

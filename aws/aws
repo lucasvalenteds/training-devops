@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+
+ACCESS_KEY=""
+SECRET_KEY=""
+
+bake () {
+    packer build -var "aws_access_key=$ACCESS_KEY" -var "aws_secret_key=$SECRET_KEY" packer.json
+}
+
+clean () {
+    terraform destroy -auto-approve -var "aws_access_key=$ACCESS_KEY" -var "aws_secret_key=$SECRET_KEY"
+}
+
+deploy () {
+    terraform apply -auto-approve -var "aws_access_key=$ACCESS_KEY" -var "aws_secret_key=$SECRET_KEY"
+}
+
+case $1 in
+    bake|clean|deploy)
+        echo "Running $1"
+        $1
+        ;;
+    *)
+        echo "Missing operation. <bake,clean,deploy>"
+        ;;
+esac

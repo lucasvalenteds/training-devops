@@ -1,0 +1,12 @@
+[Unit]
+Description=Start Calculator microservice
+StartLimitInterval=0
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=1
+ExecStart=/home/ubuntu/calculator
+
+[Install]
+WantedBy = multi-user.target

@@ -1,0 +1,56 @@
+{
+    "variables": {
+        "app": "calculator",
+        "aws_access_key": "",
+        "aws_secret_key": ""
+    },
+    "builders":[
+        {
+            "type": "amazon-ebs",
+            "access_key": "{{user `aws_access_key`}}",
+            "secret_key": "{{user `aws_secret_key`}}",
+            "region": "sa-east-1",
+            "source_ami_filter": {
+                "filters": {
+                    "virtualization-type": "hvm",
+                    "name": "ubuntu/images/*ubuntu-xenial-16.04-amd64-server-*",
+                    "root-device-type": "ebs"
+                },
+                "owners": ["099720109477"],
+                "most_recent": true
+            },
+            "instance_type": "t2.micro",
+            "ssh_username": "ubuntu",
+            "ami_name": "{{user `app`}}",
+            "force_deregister": true
+        }
+    ],
+    "provisioners": [
+        {
+            "type": "shell-local",
+            "inline": [
+                "go build -o {{user `app`}} main.go"
+            ]
+        },
+        {
+            "type": "file",
+            "source": "{{template_dir}}/{{user `app`}}",
+            "destination": "/home/ubuntu/"
+        },
+        {
+            "type": "file",
+            "source": "{{template_dir}}/{{user `app`}}.service",
+            "destination": "/home/ubuntu/"
+        },
+        {
+            "type": "shell",
+            "inline": [
+                "sudo mv /home/ubuntu/{{user `app`}}.service /lib/systemd/system/{{user `app`}}.service",
+                "sudo chmod 644 /lib/systemd/system/{{user `app`}}.service",
+                "sudo systemctl daemon-reload",
+                "sudo systemctl restart {{user `app`}}"
+            ]
+        }
+    ]
+}
+

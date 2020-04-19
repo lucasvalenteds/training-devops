@@ -1,0 +1,9 @@
+- name: Copy source code
+  copy:
+    src: "{{playbook_dir}}/"
+    dest: /home/vagrant
+
+- name: Build Calculator binary
+  shell: "go build -o calculator-microservice"
+
+- include: handlers/main.yml

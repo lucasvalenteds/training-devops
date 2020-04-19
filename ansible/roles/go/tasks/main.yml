@@ -1,0 +1,5 @@
+- name: Install latest Go
+  snap:
+    name: go
+    classic: yes
+    state: present

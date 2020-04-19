@@ -1,0 +1,14 @@
+- name: Check Calculator binary exists
+  wait_for:
+    path: /home/vagrant/calculator-microservice
+
+- name: Start Calculator in background
+  shell: nohup /home/vagrant/calculator-microservice > /dev/null 2>&1 &
+
+- name: Check Calculator is running
+  shell: "sh /home/vagrant/healthcheck.sh"
+  register: calculator_status
+
+- name: Print Calculator PID
+  debug:
+    msg: "{{calculator_status.stdout}}"

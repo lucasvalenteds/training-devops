@@ -1,0 +1,48 @@
+{
+    "variables": {
+        "ansible_host": "calculator-microservice",
+        "ansible_connection": "docker",
+        "ansible_user": "root"
+    },
+    "builders":[
+        {
+            "type": "docker",
+            "image": "ubuntu:18.04",
+            "commit": true,
+            "run_command": [
+                "--detach", 
+                "--interactive", 
+                "--tty", 
+                "--name", 
+                "{{user `ansible_host`}}", 
+                "{{.Image}}"
+            ],
+            "changes": [
+                "WORKDIR /",
+                "EXPOSE 8080",
+                "CMD [\"./calculator-microservice\"]"
+            ]
+        }
+    ],
+    "provisioners": [
+        {
+            "type": "shell-local",
+            "inline": [
+                "go build -o calculator-microservice"
+            ]
+        },
+        {
+            "type": "file",
+            "source": "{{template_dir}}/calculator-microservice",
+            "destination": "/"
+        }
+    ],
+    "post-processors": [
+        {
+            "type": "docker-tag",
+            "repository": "calculator-microservice",
+            "tag": "latest"
+        }
+    ]
+}
+

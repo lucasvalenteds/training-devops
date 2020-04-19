@@ -1,0 +1,5 @@
+vendor/
+./app
+.vagrant/
+*.log
+calculator-microservice

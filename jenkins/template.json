@@ -1,0 +1,32 @@
+{
+    "variables": {
+        "container_name": "calculator-microservice"
+    },
+    "builders":[
+        {
+            "type": "docker",
+            "image": "ubuntu:18.04",
+            "commit": true,
+            "changes": [
+                "WORKDIR /",
+                "EXPOSE 8080",
+                "CMD [\"./calculator-microservice\"]"
+            ]
+        }
+    ],
+    "provisioners": [
+        {
+            "type": "file",
+            "source": "{{template_dir}}/calculator-microservice",
+            "destination": "/"
+        }
+    ],
+    "post-processors": [
+        {
+            "type": "docker-tag",
+            "repository": "calculator-microservice",
+            "tag": "latest"
+        }
+    ]
+}
+

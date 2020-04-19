@@ -1,0 +1,6 @@
+[Unit]
+Description=Tell me a joke
+
+[Service]
+Type=oneshot
+ExecStart=/home/user/.config/systemd/user/joke.sh
